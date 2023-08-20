@@ -1,6 +1,6 @@
-# https://github.com/xtremforce/AlfredWorkflowPython
+#https://github.com/xtremforce/AlfredWorkflowPython
 
-import re
+import re,json
 import array as arr
 from xml.sax.saxutils import escape
 from wcwidth import wcswidth
@@ -98,11 +98,14 @@ class AlfredWorkflow:
                     obj[i] = escape(value)
         return obj
 
+    """ 
+    # 暂时先不用这个方法
     def toxml(self):
         xml = '<?xml version="1.0" encoding="UTF-8"?><items>'
         for item in self.itemsArray:
             itemEscaped = self.escapeValues(item)
 
+            item["uid"] = str(item["uid"]).strip()
             if(item["uid"] is not None and item["uid"].strip() != ''):
                 uidString = f' uid="{itemEscaped["uid"]}"'
             else:
@@ -111,13 +114,18 @@ class AlfredWorkflow:
             xml += f'<item'+ uidString + f' arg="{itemEscaped["arg"]}"><title>{itemEscaped["title"]}</title><subtitle>{itemEscaped["subtitle"]}</subtitle><icon>{itemEscaped["icon"]}</icon></item>'
         xml += '</items>'
         return xml
+    """
+
+    def toJson(self):
+        data = {'items': self.itemsArray}
+        return json.dumps(data)
 
     def showMessage(self,msgTitle,msgSubtitle='',arg=''):
         self.reset()
         if(arg == ''):
             arg = msgTitle
         self.addItem(1,msgTitle, msgSubtitle, arg)
-        self.show()
+        self.output()
 
-    def show(self):
-        print(self.toxml())
+    def output(self):
+        print(self.toJson())
