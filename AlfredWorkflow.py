@@ -1,3 +1,5 @@
+# https://github.com/xtremforce/AlfredWorkflowPython
+
 import re
 import array as arr
 from xml.sax.saxutils import escape
